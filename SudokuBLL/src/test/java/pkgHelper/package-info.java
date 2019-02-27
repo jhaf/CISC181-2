@@ -1,0 +1,8 @@
+/**
+ * 
+ */
+/**
+ * @author duncan
+ *
+ */
+package pkgHelper;
