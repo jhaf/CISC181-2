@@ -1,4 +1,4 @@
-# These are part of the solution that I did with my friends, should be improved
+These are part of the solution that I did with my friends, should be improved
 
 	/**
 	 * If the puzzle is a Sudoku and vaule is zero
@@ -7,9 +7,9 @@
 	 */
 	protected boolean isPartialSudoku() throws Exception {
 		boolean isPartialSudoku;
-		for(int A=0;H < super.LatinSquare.length-1; A++) {	# Conditional statements of the for loops don't check valid values, (H instead of A), thus will cause an error. -Duncan M.
+		for(int A=0;H < super.LatinSquare.length-1; A++) {	// Conditional statements of the for loops don't check valid values, (H instead of A), thus will cause an error. -Duncan M.
 			for(int B=0;S < super.LatinSquare.length-1; B++) {
-				if(super.hasDuplicates(getRegion(A,B)) == false) { # This code will only check the duplicates of regions, and not the rows or columns. -Duncan M.
+				if(super.hasDuplicates(getRegion(A,B)) == false) { // This code will only check the duplicates of regions, and not the rows or columns. -Duncan M.
 					isPartialSudoku = true;
 				}
 				else {
@@ -18,7 +18,7 @@
 			}
 		}
 		
-		# The conditional below makes the one above invalid because of the hard if else. -Duncan M.
+		// The conditional below makes the one above invalid because of the hard if else. -Duncan M.
 		
 		if(super.ContainsZero()==true) {
 			isPartialSudoku = true;
