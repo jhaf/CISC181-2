@@ -1,0 +1,138 @@
+This is what I did with my friends, but they use this as their answer so maybe u guys can change it a little bit? Thank you.
+
+package pkgGmae;
+
+import java.util.Arrays;
+
+import pkgHelper.LatinSquare;
+
+public class Sudoku extends LatinSquare {
+	public static void main(String[] args) {
+	}
+	private int iSize;
+	
+	private int iSqrtSize;
+	
+	public Sudoku() {
+		super();
+	}
+	
+	public Sudoku(int[][] latinSquare) {
+		super(latinSquare);
+	}
+	
+	protected int [][] getpuzzle() {
+		return super.getLatinSquare();
+	}
+	
+	protected int [] getRegion(int Col, int Row) throws Exception {
+		int iSize = super.getLatinSquare().length;
+		int iSqrtSize = (int) Math.sqrt(iSize);
+		int r = (Col / iSize) + (Row / iSize) * iSqrtSize;
+		
+		return getRegion(r);
+	}
+	
+	protected int [] getRegion(int r) throws Exception{
+		int iSize = super.getLatinSquare().length;
+		int iSqrtSize = (int) Math.sqrt(iSize);
+		int Arrayplace = 0;
+		int A [] = null;
+		if (r%iSqrtSize==0) {
+			for (int a=(r/iSqrtSize-1)*iSqrtSize;a<=r/iSqrtSize*iSqrtSize-1;a++) {
+				for(int b=(iSqrtSize*iSqrtSize-1);b<=(iSize-1);b++) {
+					A[Arrayplace] = super.LatinSquare[a][b];
+					Arrayplace = Arrayplace + 1;
+					
+					
+				}
+			}
+		}
+		else {
+			for (int a=(r/iSqrtSize)*iSqrtSize;a<=(r/iSqrtSize+1)*iSqrtSize-1;a++) {
+				for(int b=((r%iSqrtSize-1)*iSqrtSize);b<=(r%iSqrtSize*iSqrtSize);b++) {
+					A[Arrayplace] = super.LatinSquare[a][b];
+					Arrayplace = Arrayplace +1;	
+				}
+			}
+		}
+		return A;
+	}
+	/**
+	 * If the puzzle is a LatinSqaure... and each value of each region exists in the first row
+	 * of the puzzle
+	 * 
+	 * 
+	 * @return true, if it's a complete Sudoku
+	 */
+	protected boolean isSudoku() {
+		boolean isSudoku = true;
+		for(int H=0;H < super.LatinSquare.length-1; H++) {
+			for(int S=0;S < super.LatinSquare.length-1; S++) {
+				if(super.hasAllValues(super.getColumn(H),super.getRow(S))==true) {
+					return isSudoku;
+				}
+				else {
+					isSudoku = false;
+				}
+			}
+		}
+		return isSudoku;
+		
+	}
+	/**
+	 * If the puzzle is a Sudoku... and any of the values is zero
+	 * 
+	 * @return
+	 */
+	protected boolean isPartialSudoku() throws Exception {
+		boolean isPartialSudoku;
+		for(int H=0;H < super.LatinSquare.length-1; H++) {
+			for(int S=0;S < super.LatinSquare.length-1; S++) {
+				if(super.hasDuplicates(getRegion(H,S)) == false) {
+					isPartialSudoku = true;
+				}
+				else {
+					isPartialSudoku = false;
+				}
+			}
+		}
+		if(super.ContainsZero()==true) {
+			isPartialSudoku = true;
+		}
+		else {
+			isPartialSudoku = false;
+		}
+		return isPartialSudoku;
+	}
+
+	
+	/**
+	 * 
+	 * @param iValue - value you're attempting
+	 * @param Col - column in the puzzle
+	 * @param Row - row in the puzzle
+	 * @return - return 'true' if the given value is possible in the puzzle
+	 */
+	protected boolean isValueValid(int iValue, int Col, int Row) throws Exception{
+		boolean isValueValid = true;
+		for(int H=0;H < super.LatinSquare.length-1; H++) {
+			if(super.doesElementExist(super.getColumn(H), iValue)==true) {
+				isValueValid = true;
+			}
+			else {
+				isValueValid = false;
+			}
+		}
+		for(int S=0;S < super.LatinSquare.length-1; S++) {
+			if(super.doesElementExist(super.getRow(S), iValue)) {
+				isValueValid = true;
+			}
+			else {
+				isValueValid = false;
+			}
+		}
+		return isValueValid;
+	}
+}
+
