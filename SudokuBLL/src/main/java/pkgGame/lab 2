@@ -1,0 +1,58 @@
+These are part of the solution that I did with my friends
+
+
+/**
+	 * If the puzzle is a Sudoku and vaule is zero
+	 * 
+	 * @return
+	 */
+	protected boolean isPartialSudoku() throws Exception {
+		boolean isPartialSudoku;
+		for(int A=0;H < super.LatinSquare.length-1; A++) {
+			for(int B=0;S < super.LatinSquare.length-1; B++) {
+				if(super.hasDuplicates(getRegion(A,B)) == false) {
+					isPartialSudoku = true;
+				}
+				else {
+					isPartialSudoku = false;
+				}
+			}
+		}
+		if(super.ContainsZero()==true) {
+			isPartialSudoku = true;
+		}
+		else {
+			isPartialSudoku = false;
+		}
+		return isPartialSudoku;
+	}
+
+	
+	/**
+	 * 
+	 * @param iValue - value you're attempting
+	 * @param Col - column in the puzzle
+	 * @param Row - row in the puzzle
+	 * @return - return 'true' if the value is in the puzzle
+	 */
+	protected boolean isValueValid(int iValue, int Col, int Row) throws Exception{
+		boolean isValueValid = true;
+		for(int A=0;A < super.LatinSquare.length-1; A++) {
+			if(super.doesElementExist(super.getColumn(A), iValue)==true) {
+				isValueValid = true;
+			}
+			else {
+				isValueValid = false;
+			}
+		}
+		for(int B=0;B < super.LatinSquare.length-1; B++) {
+			if(super.doesElementExist(super.getRow(B), iValue)) {
+				isValueValid = true;
+			}
+			else {
+				isValueValid = false;
+			}
+		}
+		return isValueValid;
+	}
+}
