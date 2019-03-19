@@ -291,7 +291,10 @@ public class Sudoku extends LatinSquare {
 	public void printPuzzle() {
 		
 		for(int r = 0; r < this.iSize; r++) {
+			if(r % this.iSqrtSize == 0) {System.out.println("");}
 			for(int c = 0; c < this.iSize; c++) {
+				if(c % this.iSqrtSize == 0) {System.out.print(" ");}
+				
 				System.out.print(this.getPuzzle()[r][c] + " ");
 			}
 			System.out.println();
@@ -303,26 +306,34 @@ public class Sudoku extends LatinSquare {
 	 * Sets the diagonal regions to random values from 1 to length
 	 */
 	public void FillDiagonalRegions() {
-		
+		// Generate first diagonal
 		for(int r = 0; r < this.iSize; r += this.iSqrtSize + 1) {
-			this.SetRegion(r);
+			
+			// Create new int array with all values
+			int [] allValues = new int[this.iSize];
+			
+			for(int i = 0; i < this.iSize; i++) {
+				allValues[i] = i + 1;
+			}
+			
+			// set region to all values
+			this.SetRegion(r, allValues);
+			
+			// Shuffle values
 			this.ShuffleRegion(r);
 		}
-		
-		
-		// Is this all that is needed? or should the other diagonal be filled also?
 	}
 	
 	/**
 	 * Fills in a region with values of 1 to the length
 	 */
-	public void SetRegion(int r) {
+	public void SetRegion(int r, int [] val) {
 		
 		int down = (r / this.iSqrtSize) * this.iSqrtSize;
 		int over = (r % this.iSqrtSize) * this.iSqrtSize;
 		
 		for(int i = 0; i < this.iSize; i++) {
-			this.getPuzzle()[down + i / this.iSqrtSize][over + i % this.iSqrtSize] = (i + 1);
+			this.getPuzzle()[down + i / this.iSqrtSize][over + i % this.iSqrtSize] = val[i];
 		}
 	}
 	

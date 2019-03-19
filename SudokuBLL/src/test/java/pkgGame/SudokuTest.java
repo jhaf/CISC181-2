@@ -328,6 +328,7 @@ public class SudokuTest {
 		assertFalse(Arrays.equals(iExpected, iActual));
 	}
 	
+	
 	@Test
 	public void test_FillDiagonalRegions_2() {
 		s2.FillDiagonalRegions();
@@ -340,7 +341,7 @@ public class SudokuTest {
 	
 	@Test
 	public void test_SetRegion() {
-		s2.SetRegion(4);
+		s2.SetRegion(4, new int [] {1,2,3,4,5,6,7,8,9});
 		int [] iExpected = {1,2,3,4,5,6,7,8,9};
 		int [] iActual = s2.getRegion(4);
 		
