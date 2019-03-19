@@ -1,5 +1,7 @@
 package pkgGame;
 
+import java.util.Random;
+
 import pkgEnum.ePuzzleViolation;
 import pkgHelper.LatinSquare;
 import pkgHelper.PuzzleViolation;
@@ -270,5 +272,101 @@ public class Sudoku extends LatinSquare {
 		}
 		
 		return true;
+	}
+	
+	
+	
+	/**
+	 * Returns the region number of a specified row and col
+	 */
+	public int getRegionNbr(int row, int col) {
+		
+		return (row / this.iSqrtSize) * this.iSqrtSize + (col % this.iSqrtSize);
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public void printPuzzle() {
+		
+		for(int r = 0; r < this.iSize; r++) {
+			for(int c = 0; c < this.iSize; c++) {
+				System.out.print(this.getPuzzle()[r][c] + " ");
+			}
+			System.out.println();
+		}
+		
+	}
+	
+	/**
+	 * Sets the diagonal regions to random values from 1 to length
+	 */
+	public void FillDiagonalRegions() {
+		
+		for(int r = 0; r < this.iSize; r += this.iSqrtSize + 1) {
+			this.SetRegion(r);
+			this.ShuffleRegion(r);
+		}
+		
+		
+		// Is this all that is needed? or should the other diagonal be filled also?
+	}
+	
+	/**
+	 * Fills in a region with values of 1 to the length
+	 */
+	public void SetRegion(int r) {
+		
+		int down = (r / this.iSqrtSize) * this.iSqrtSize;
+		int over = (r % this.iSqrtSize) * this.iSqrtSize;
+		
+		for(int i = 0; i < this.iSize; i++) {
+			this.getPuzzle()[down + i / this.iSqrtSize][over + i % this.iSqrtSize] = (i + 1);
+		}
+	}
+	
+	/**
+	 * Shuffles a region of the puzzle
+	 */
+	public void ShuffleRegion(int r) {
+		
+		int [] shuffled = this.getRegion(r);
+		this.shuffleArray(shuffled);
+		
+		int down = (r / this.iSqrtSize) * this.iSqrtSize;
+		int over = (r % this.iSqrtSize) * this.iSqrtSize;
+		
+		for(int i = 0; i < this.iSize; i++) {
+			this.getPuzzle()[down + i / this.iSqrtSize][over + i % this.iSqrtSize] = shuffled[i];
+		}
+	}
+	
+	/**
+	 * Shuffles the given array;
+	 */
+	public void shuffleArray(int [] a) {
+		// Generating a new array
+		int[] b = new int[a.length];
+		for(int i = 0; i < b.length; i++) {
+			b[i] = 0;
+		}
+		
+		// shuffling array a into b
+		for(int i = 0; i < a.length; i++) {
+			boolean bloop = true;
+			while(bloop) {
+				Random rng = new Random();	// Change Random to Secure random?
+				int iRng = rng.nextInt(a.length);
+				if(b[iRng] == 0) {
+					b[iRng] = a[i]; 
+					bloop = false;
+				}
+			}
+		}
+		// setting a to b
+		for(int i = 0; i < a.length; i++) {
+			a[i] = b[i];
+		}
 	}
 }

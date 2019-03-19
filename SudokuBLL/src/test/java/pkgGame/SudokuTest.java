@@ -4,9 +4,52 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class SudokuTest {
+	
+	int[][] p1;
+	Sudoku s1;
+	
+	int[][] p2;
+	Sudoku s2;
+	
+	@Before
+	public void setup() {
+		int[][] p1 = {{1,2,3,4,5,6,7,8,9},
+					  {4,5,6,7,8,9,1,2,3},
+					  {7,8,9,1,2,3,4,5,6},
+					  {2,3,4,5,6,7,8,9,1},
+					  {5,6,7,8,9,1,2,3,4},
+					  {8,9,1,2,3,4,5,6,7},
+					  {3,4,5,6,7,8,9,1,2},
+					  {6,7,8,9,1,2,3,4,5},
+					  {9,1,2,3,4,5,6,7,8}};
+		
+		int[][] p2 = {{0,0,0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0,0,0}};
+		
+		try {
+			s1 = new Sudoku(p1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			s2 = new Sudoku(p2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 /*
 	@Test
 	public void Sudoku_Test1() {
@@ -229,7 +272,7 @@ public class SudokuTest {
 			fail("Test failed to build a Sudoku");
 		}
 		
-	}	*/
+	}
 
 	@Test
 	public void TestRegionNbr()
@@ -257,5 +300,93 @@ public class SudokuTest {
 		
 		assertTrue(Arrays.equals(Region5, s1.getRegion(5)));
 		
+	}	*/
+	
+	@Test
+	public void test_getRegionNbr_1() {
+		int iExpected = 5;
+		int iActual = s1.getRegionNbr(4, 8);
+		
+		assertEquals(iExpected, iActual);
 	}
+	
+	@Test
+	public void test_getRegionNbr_2() {
+		
+		int iExpected = 3;
+		int iActual = s1.getRegionNbr(3, 0);
+		
+		assertEquals(iExpected, iActual);
+	}
+	
+	@Test
+	public void test_FillDiagonalRegions_1() {
+		s2.FillDiagonalRegions();
+		int [] iExpected = new int[] {0,0,0,0,0,0,0,0,0};
+		int [] iActual = s2.getRegion(0);
+		
+		assertFalse(Arrays.equals(iExpected, iActual));
+	}
+	
+	@Test
+	public void test_FillDiagonalRegions_2() {
+		s2.FillDiagonalRegions();
+		int [] iExpected = new int[] {0,0,0,0,0,0,0,0,0};
+		int [] iActual = s2.getRegion(4);
+		
+		assertFalse(Arrays.equals(iExpected, iActual));
+	}
+	
+	
+	@Test
+	public void test_SetRegion() {
+		s2.SetRegion(4);
+		int [] iExpected = {1,2,3,4,5,6,7,8,9};
+		int [] iActual = s2.getRegion(4);
+		
+		assertTrue(Arrays.equals(iExpected, iActual));
+	}
+	
+	@Test
+	public void test_ShuffleRegion_1() {
+		
+		int [] before = Arrays.copyOf(s1.getRegion(0), 9);
+		s1.ShuffleRegion(0);
+		int [] after = Arrays.copyOf(s1.getRegion(0), 9);
+		
+		assertFalse(Arrays.equals(before, after));
+		
+	}
+	
+	@Test
+	public void test_ShuffleRegion_2() {
+		
+		int [] before = Arrays.copyOf(s1.getRegion(5), 9);
+		s1.ShuffleRegion(5);
+		int [] after = Arrays.copyOf(s1.getRegion(5), 9);
+		
+		assertFalse(Arrays.equals(before, after));
+		
+	}
+	
+	@Test
+	public void test_shuffleArray_1() {
+		
+		int [] init = {1,2,3,4,5,6,7,8,9};
+		int [] fin = Arrays.copyOf(init, init.length);
+		s1.shuffleArray(fin);
+		
+		assertFalse(Arrays.equals(init, fin));
+	}
+	
+	@Test
+	public void test_shuffleArray_2() {
+		
+		int [] init = {9,8,7,6,5,4,3,2,1};
+		int [] fin = Arrays.copyOf(init, init.length);
+		s1.shuffleArray(fin);
+		
+		assertFalse(Arrays.equals(init, fin));
+	}
+	
 }
