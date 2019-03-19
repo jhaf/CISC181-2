@@ -320,24 +320,11 @@ public class SudokuTest {
 	}
 	
 	@Test
-	public void test_FillDiagonalRegions_1() {
+	public void test_FillDiagonalRegions() {
 		s2.FillDiagonalRegions();
-		int [] iExpected = new int[] {0,0,0,0,0,0,0,0,0};
-		int [] iActual = s2.getRegion(0);
 		
-		assertFalse(Arrays.equals(iExpected, iActual));
+		assertTrue(s2.isPartialSudoku());
 	}
-	
-	
-	@Test
-	public void test_FillDiagonalRegions_2() {
-		s2.FillDiagonalRegions();
-		int [] iExpected = new int[] {0,0,0,0,0,0,0,0,0};
-		int [] iActual = s2.getRegion(4);
-		
-		assertFalse(Arrays.equals(iExpected, iActual));
-	}
-	
 	
 	@Test
 	public void test_SetRegion() {
@@ -349,22 +336,11 @@ public class SudokuTest {
 	}
 	
 	@Test
-	public void test_ShuffleRegion_1() {
+	public void test_ShuffleRegion() {
 		
 		int [] before = Arrays.copyOf(s1.getRegion(0), 9);
 		s1.ShuffleRegion(0);
 		int [] after = Arrays.copyOf(s1.getRegion(0), 9);
-		
-		assertFalse(Arrays.equals(before, after));
-		
-	}
-	
-	@Test
-	public void test_ShuffleRegion_2() {
-		
-		int [] before = Arrays.copyOf(s1.getRegion(5), 9);
-		s1.ShuffleRegion(5);
-		int [] after = Arrays.copyOf(s1.getRegion(5), 9);
 		
 		assertFalse(Arrays.equals(before, after));
 		
