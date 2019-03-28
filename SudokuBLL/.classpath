@@ -34,6 +34,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/duncan/Downloads/commons-lang3-3.8.1-bin.zip"/>
+	<classpathentry kind="lib" path="/home/duncan/Downloads/commons-lang3-3.8.1-bin/commons-lang3-3.8.1/commons-lang3-3.8.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

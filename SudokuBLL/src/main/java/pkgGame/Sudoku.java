@@ -281,12 +281,12 @@ public class Sudoku extends LatinSquare {
 	 */
 	public int getRegionNbr(int row, int col) {
 		
-		return (row / this.iSqrtSize) * this.iSqrtSize + (col % this.iSqrtSize);
+		return (row / this.iSqrtSize) * this.iSqrtSize + (col / this.iSqrtSize);
 		
 	}
 	
 	/**
-	 * 
+	 * Prints Puzzle
 	 */
 	public void printPuzzle() {
 		
@@ -344,13 +344,7 @@ public class Sudoku extends LatinSquare {
 		
 		int [] shuffled = this.getRegion(r);
 		this.shuffleArray(shuffled);
-		
-		int down = (r / this.iSqrtSize) * this.iSqrtSize;
-		int over = (r % this.iSqrtSize) * this.iSqrtSize;
-		
-		for(int i = 0; i < this.iSize; i++) {
-			this.getPuzzle()[down + i / this.iSqrtSize][over + i % this.iSqrtSize] = shuffled[i];
-		}
+		this.SetRegion(r, shuffled);
 	}
 	
 	/**

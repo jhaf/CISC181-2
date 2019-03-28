@@ -3,7 +3,7 @@ package pkgHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import pkgEnum.ePuzzleViolation;
 
