@@ -9,6 +9,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import pkgEnum.eGameDifficulty;
+
 public class SudokuPrivateMethodsTest {
 
 	private void PrintStars() {
@@ -22,6 +24,7 @@ public class SudokuPrivateMethodsTest {
 
 		Sudoku s1 = null;
 		int iPuzzleSize = 9;
+		eGameDifficulty eDif = eGameDifficulty.EASY;
 		int[] iExpectedRegion = new int[iPuzzleSize];
 		for (int i = 0; i < iPuzzleSize; i++) {
 			iExpectedRegion[i] = i + 1;
@@ -30,10 +33,12 @@ public class SudokuPrivateMethodsTest {
 
 		try {
 			Class<?> c = Class.forName("pkgGame.Sudoku");
-			Constructor constructor = c.getConstructor(new Class[] { int.class });
+			Constructor constructor = c.getConstructor(new Class[] { int.class, eGameDifficulty.class});
 			constructor.setAccessible(true);
-			s1 = (Sudoku) constructor.newInstance(iPuzzleSize);
-
+			s1 = (Sudoku) constructor.newInstance(iPuzzleSize, eDif);
+			
+			System.out.println(s1.toString() + " | " + s1.getClass());
+			
 			Method mSetRegion = c.getDeclaredMethod("SetRegion", new Class[] { int.class });
 
 			PrintStars();
@@ -60,7 +65,6 @@ public class SudokuPrivateMethodsTest {
 		} catch (NoSuchMethodException e) {
 			fail("NoSuchMethodException");
 		} catch (SecurityException e) {
-
 			fail("SecurityException");
 		} catch (InstantiationException e) {
 			fail("InstantiationException");
@@ -79,15 +83,19 @@ public class SudokuPrivateMethodsTest {
 	@Test
 	public void FillDiagonalRegions() {
 		
+		System.out.println("HELLO WORLD");
+		
 		Sudoku s1 = null;
 		int iPuzzleSize = 9;
-		
+		eGameDifficulty eDif = eGameDifficulty.EASY;
 		try {
 			Class<?> c = Class.forName("pkgGame.Sudoku");
-			Constructor constructor = c.getConstructor(new Class[] { int.class });
+			Constructor constructor = c.getConstructor(new Class[] { int.class, eGameDifficulty.class });
 			constructor.setAccessible(true);
-			s1 = (Sudoku) constructor.newInstance(iPuzzleSize);
-
+			s1 = (Sudoku) constructor.newInstance(iPuzzleSize, eDif);
+			
+			System.out.println(s1.toString() + " | " + s1.getClass());
+			
 			Method mFillDiagonalRegions = c.getDeclaredMethod("FillDiagonalRegions", null);
 
 			PrintStars();

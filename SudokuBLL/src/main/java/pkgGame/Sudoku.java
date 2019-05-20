@@ -117,7 +117,23 @@ public class Sudoku extends LatinSquare implements Serializable {
 		}
 
 	}
-
+	
+	/**
+	 * Copy - Returns a copy of this puzzle
+	 * 
+	 * @since Lab #6
+	 * @author Duncan McCloud
+	 */
+	public Sudoku copy() {
+		try {
+			return new Sudoku(this.getPuzzle());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	/**
 	 * getiSize - the UI needs to know the size of the puzzle
 	 *
@@ -822,6 +838,15 @@ public class Sudoku extends LatinSquare implements Serializable {
 	}
 	
 	/**
+	 * Resets mistakes to zero
+	 */
+	public void resetMistake()
+	{
+		this.iMistakesCnt = 0;
+	}
+	
+	
+	/**
 	 * isPuzzleMaxMistakes - Check to see if the current count of mistakes is larger than the maximum mistakes allowed for puzzle type
 	 * 
 	 * @version 1.6
@@ -830,7 +855,7 @@ public class Sudoku extends LatinSquare implements Serializable {
 	
 	public boolean isPuzzleMaxMistakes()
 	{
-		if (this.iMistakesCnt > this.eGD.getiMaxMistakes())
+		if (this.iMistakesCnt >= this.eGD.getiMaxMistakes())
 		{
 			return true;
 		}
@@ -919,9 +944,7 @@ public class Sudoku extends LatinSquare implements Serializable {
 						return null;
 				}
 			}
-
 			return (SudokuCell) cells.get(Objects.hash(iRow, iCol));
-
 		}
 	}
 }

@@ -14,7 +14,7 @@
       <HBox alignment="CENTER" prefHeight="82.0" prefWidth="306.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#btnStartGame" text="Start Game" />
-            <Button mnemonicParsing="false" text="End Game" />
+            <Button fx:id="btnRestart" mnemonicParsing="false" onAction="#btnRestartGame" text="Restart Game" disable="true" />
          </children></HBox>
    </bottom>
    <top>

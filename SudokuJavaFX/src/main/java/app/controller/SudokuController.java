@@ -3,6 +3,7 @@ package app.controller;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import app.Game;
@@ -21,6 +22,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -59,14 +61,19 @@ public class SudokuController implements Initializable {
 
 	@FXML
 	private HBox hboxNumbers;
-
+	
+	@FXML
+	private Button btnRestart;
+	
+	
 	private int iCellSize = 45;
 	private static final DataFormat myFormat = new DataFormat("com.cisc181.Data.Cell");
 	private static final DataFormat myTrashCanFormat = new DataFormat("com.cisc181.TrashCan");
 
 	private eGameDifficulty eGD = null;
 	private Sudoku s = null;
-
+	private int[][] oPuz = null;
+	
 	public void setMainApp(Game game) {
 		this.game = game;
 	}
@@ -88,7 +95,22 @@ public class SudokuController implements Initializable {
 		CreateSudokuInstance();
 		BuildGrids();
 	}
-
+	
+	
+	@FXML
+	private void btnRestartGame(ActionEvent event) {
+		
+		for(int iRow = 0; iRow < game.GetGameSize(); iRow ++) {
+			for(int iCol = 0; iCol < game.GetGameSize(); iCol ++) {
+				this.game.getSudoku().getPuzzle()[iRow][iCol] = oPuz[iRow][iCol];
+			}
+		}
+		game.getSudoku().resetMistake();
+		BuildGrids();
+		btnRestart.setDisable(true);
+		hboxNumbers.setDisable(false);
+	}
+	
 	/**
 	 * CreateSudokuInstance - Create an instance of Sudoku, set the attribute in the
 	 * 'Game' class
@@ -100,6 +122,12 @@ public class SudokuController implements Initializable {
 	private void CreateSudokuInstance() {
 		eGD = this.game.GetGameDifficulty();
 		s = game.StartSudoku(this.game.GetGameSize(), eGD);
+		oPuz = new int[s.getiSize()][s.getiSize()];
+		for(int iRow = 0; iRow < game.GetGameSize(); iRow ++) {
+			for(int iCol = 0; iCol < game.GetGameSize(); iCol ++) {
+				oPuz[iRow][iCol] = s.getPuzzle()[iRow][iCol];
+			}
+		}
 	}
 
 	/**
@@ -241,7 +269,11 @@ public class SudokuController implements Initializable {
 				boolean success = false;
 				if (db.hasContent(myTrashCanFormat)) {
 					Cell CellFrom = (Cell) db.getContent(myTrashCanFormat);
-
+					
+					if(oPuz[CellFrom.getiRow()][CellFrom.getiCol()] == 0) {
+						game.getSudoku().getPuzzle()[CellFrom.getiRow()][CellFrom.getiCol()] = 0;
+					}
+					
 					game.getSudoku().PrintPuzzle();
 					event.setDropCompleted(success);
 					event.consume();
@@ -328,8 +360,8 @@ public class SudokuController implements Initializable {
 				paneTarget.setOnDragOver(new EventHandler<DragEvent>() {
 					public void handle(DragEvent event) {
 						if (event.getGestureSource() != paneTarget && event.getDragboard().hasContent(myFormat)) {
-							// Don't let the user drag over items that already have a cell value set
-							if (paneTarget.getCell().getiCellValue() == 0) {
+							// Don't let the user drag over items that have original value of zero
+							if (oPuz[paneTarget.getCell().getiRow()][paneTarget.getCell().getiCol()] == 0) { // paneTarget.getCell().getiCellValue() == 0
 								event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
 							}
 						}
@@ -345,7 +377,7 @@ public class SudokuController implements Initializable {
 							Dragboard db = event.getDragboard();
 							Cell CellFrom = (Cell) db.getContent(myFormat);
 							Cell CellTo = (Cell) paneTarget.getCell();
-							if (CellTo.getiCellValue() == 0) {
+							if (oPuz[CellTo.getiRow()][CellTo.getiCol()] == 0) {
 								if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
 									if (game.getShowHints()) {
 										paneTarget.getChildren().add(0, SudokuStyler.getRedPane());
@@ -393,7 +425,7 @@ public class SudokuController implements Initializable {
 
 								// TODO: Set the message for mistakes
 								if (game.getShowHints()) {
-
+									
 								}
 							}
 
@@ -406,13 +438,17 @@ public class SudokuController implements Initializable {
 							System.out.println(CellFrom.getiCellValue());
 							
 							
-							
-							game.getSudoku().getPuzzle()[CellFrom.getiRow()][CellFrom.getiCol()] = CellFrom.getiCellValue();
+							game.getSudoku().getPuzzle()[CellTo.getiRow()][CellTo.getiCol()] = CellFrom.getiCellValue();
 							
 							
 							success = true;
 						}
+						
 						game.getSudoku().PrintPuzzle();
+						
+						if (game.getSudoku().isPuzzleMaxMistakes() || !game.getSudoku().isSudoku()) {
+							EndGame();
+						}
 						
 						event.setDropCompleted(success);
 						event.consume();
@@ -420,10 +456,6 @@ public class SudokuController implements Initializable {
 				});
 
 				gridPaneSudoku.add(paneTarget, iCol, iRow); // Add the pane to the grid
-
-				if (game.getSudoku().isPuzzleMaxMistakes()) {
-					// Game is over... Max Mistakes reached
-				}
 
 			}
 
@@ -436,6 +468,18 @@ public class SudokuController implements Initializable {
 		// Disable the hboxNumbers items so they can't be dragged
 		// Show message that the game is over
 		// Allow them to 'clear' cells / reset mistakes
+		
+		
+		this.hboxNumbers.setDisable(true);
+		
+		this.gpTop.getChildren().clear();
+		Label lblOVER = new Label("GAME OVER");
+		gpTop.add(lblOVER, 0, 0);
+		
+		Label lblMistake = new Label(game.getSudoku().getMistakesMessage());
+		gpTop.add(lblMistake, 1, 0);
+		
+		btnRestart.setDisable(false);
 	}
 
 	private Image GetImage(int iValue) {
